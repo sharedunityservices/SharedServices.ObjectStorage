@@ -15,7 +15,7 @@ namespace SharedServices.ObjectStorage.V1
             string range = null)
         {
             const string service = "s3";
-            _environmentService ??= Service.Get<IEnvironmentService>();
+            _environmentService ??= ServiceLocator.Get<IEnvironmentService>();
             var region = GetRegion(path);
             var accessKey = _environmentService.Get("MINIO_ACCESS_KEY");
             var secretKey = _environmentService.Get("MINIO_SECRET_KEY");

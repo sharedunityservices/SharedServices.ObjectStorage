@@ -13,7 +13,7 @@ namespace SharedServices.ObjectStorage.V1
 
         public void Initialize()
         {
-            _environmentService = Service.Get<IEnvironmentService>();
+            _environmentService = ServiceLocator.Get<IEnvironmentService>();
         }
 
         public void Download<T>(string path, Action<T> callback)
