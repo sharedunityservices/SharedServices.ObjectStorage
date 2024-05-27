@@ -1,0 +1,15 @@
+{
+  "name": "com.sharedunityservices.objectstorage",
+  "displayName": "SharedServices.ObjectStorage",
+  "version": "1.0.0",
+  "description": "<b>Dependencies:</b> https://github.com/sharedunityservices/SharedServices..Core.git\n\n<b>SharedServices.ObjectStorage</b> is a Unity package that provides a simple way to store and retrieve objects in Unity. It is built on top of the SharedServices.Core package.",
+  "unity": "2020.1",
+  "author": {
+    "name": "ETdoFresh",
+    "email": "etdofresh@gmail.com",
+    "url": "https://github.com/sharedunityservices"
+  },
+  "dependencies": {
+    "com.sharedunityservices.core": "1.0.0"
+  }
+}
