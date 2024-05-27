@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace Utility.Json
+namespace SharedServices.ObjectStorage.V1
 {
     public static class JsonUtil
     {

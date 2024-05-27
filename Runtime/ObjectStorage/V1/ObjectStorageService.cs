@@ -1,15 +1,11 @@
 ﻿using System;
 using System.Threading.Tasks;
 using SharedServices.Environment.V1;
-using SharedServices.Locator;
 using SharedServices.Locator.V1;
 using UnityEngine;
 using UnityEngine.Networking;
-using Utility.Async;
-using Utility.Json;
-using Utility.WebRequest;
 
-namespace Services.ObjectStorage
+namespace SharedServices.ObjectStorage.V1
 {
     public class ObjectStorageService : IObjectStorageService
     {

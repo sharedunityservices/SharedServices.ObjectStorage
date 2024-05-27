@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 
-namespace Services.ObjectStorage.Archive
+namespace SharedServices.ObjectStorage.Archive
 {
     public static class ObjectStorageServiceArchive
     {

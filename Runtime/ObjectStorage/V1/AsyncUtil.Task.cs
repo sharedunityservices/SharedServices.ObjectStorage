@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace Utility.Async
+namespace SharedServices.ObjectStorage.V1
 {
     public static partial class AsyncUtil
     {

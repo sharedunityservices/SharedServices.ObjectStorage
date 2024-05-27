@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace Utility.Async
+namespace SharedServices.ObjectStorage.V1
 {
     public class WaitUntilCallback : CustomYieldInstruction
     {

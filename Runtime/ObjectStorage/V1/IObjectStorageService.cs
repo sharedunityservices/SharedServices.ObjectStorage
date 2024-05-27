@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
-using SharedServices;
 using SharedServices.V1;
-using Utility.Async;
 
-namespace Services.ObjectStorage
+namespace SharedServices.ObjectStorage.V1
 {
     public interface IObjectStorageService : IService
     {

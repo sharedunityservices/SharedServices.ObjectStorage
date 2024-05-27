@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine.Networking;
 
-namespace Utility.WebRequest
+namespace SharedServices.ObjectStorage.V1
 {
     public static class WebRequestUtil
     {

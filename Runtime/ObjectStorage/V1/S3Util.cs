@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Linq;
 using SharedServices.Environment.V1;
-using SharedServices.Locator;
 using SharedServices.Locator.V1;
 using UnityEngine;
 using UnityEngine.Networking;
-using Utility.Json;
 
-namespace Services.ObjectStorage
+namespace SharedServices.ObjectStorage.V1
 {
     public static class S3Util
     {

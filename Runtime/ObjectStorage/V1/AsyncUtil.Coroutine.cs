@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Utility.Async
+namespace SharedServices.ObjectStorage.V1
 {
     public static partial class AsyncUtil
     {
