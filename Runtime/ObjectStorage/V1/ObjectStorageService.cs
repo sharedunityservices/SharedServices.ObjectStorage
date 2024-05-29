@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using SharedServices.Environment.V1;
-using SharedServices.Locator.V1;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -9,13 +7,6 @@ namespace SharedServices.ObjectStorage.V1
 {
     public class ObjectStorageService : IObjectStorageService
     {
-        private IEnvironmentService _environmentService;
-
-        public void Initialize()
-        {
-            _environmentService = ServiceLocator.Get<IEnvironmentService>();
-        }
-
         public void Download<T>(string path, Action<T> callback)
         {
             var timeStampIso8601Format = DateTime.UtcNow.ToString("yyyyMMddTHHmmssZ");
