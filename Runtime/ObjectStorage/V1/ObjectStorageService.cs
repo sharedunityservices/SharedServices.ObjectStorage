@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using SharedServices.Json.V1;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -37,7 +38,7 @@ namespace SharedServices.ObjectStorage.V1
                     else if (typeof(T) == typeof(byte[]))
                         callback?.Invoke((T)(object)request.downloadHandler.data);
                     else
-                        callback?.Invoke(JsonUtil.FromJson<T>(request.downloadHandler.text));
+                        callback?.Invoke(IJsonService.FromJson<T>(request.downloadHandler.text));
                 });
         }
         

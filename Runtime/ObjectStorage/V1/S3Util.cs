@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using SharedServices.Environment.V1;
+using SharedServices.Json.V1;
 using SharedServices.Locator.V1;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -132,7 +133,7 @@ namespace SharedServices.ObjectStorage.V1
             }
             else
             {
-                var dataString = JsonUtil.ToJson(data);
+                var dataString = IJsonService.ToJson(data);
                 return System.Text.Encoding.UTF8.GetBytes(dataString);
             }
         }
