@@ -5,6 +5,7 @@ using UnityEngine.Networking;
 
 namespace SharedServices.ObjectStorage.V1
 {
+    [UnityEngine.Scripting.Preserve]
     public class ObjectStorageService : IObjectStorageService
     {
         public void Download<T>(string path, Action<T> callback)
