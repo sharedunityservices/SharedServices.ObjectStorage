@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using SharedServices.Json.V1;
+using SharedServices.Xml.V1;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -9,7 +10,7 @@ namespace SharedServices.ObjectStorage.V1
     [UnityEngine.Scripting.Preserve]
     public class ObjectStorageService : IObjectStorageService
     {
-        public void Download<T>(string path, Action<T> callback)
+        public void GetObject<T>(string path, Action<T> callback)
         {
             var timeStampIso8601Format = DateTime.UtcNow.ToString("yyyyMMddTHHmmssZ");
             var hashedPayload = S3Util.GetHashedPayload(S3Util.GetBytes(""));
@@ -42,13 +43,13 @@ namespace SharedServices.ObjectStorage.V1
                 });
         }
         
-        public WaitUntilCallback<string, T> DownloadRoutine<T>(string path) => 
-            AsyncUtil.CallbackToIEnumerator<string, T>(path, Download);
+        public WaitUntilCallback<string, T> GetObjectRoutine<T>(string path) => 
+            AsyncUtil.CallbackToIEnumerator<string, T>(path, GetObject);
         
-        public Task<T> DownloadAsync<T>(string path) => 
-            AsyncUtil.CallbackToTask<string, T>(path, Download);
+        public Task<T> GetObjectAsync<T>(string path) => 
+            AsyncUtil.CallbackToTask<string, T>(path, GetObject);
         
-        public void Upload<T>(string path, T data, Action<bool> callback)
+        public void PutObject<T>(string path, T data, Action<bool> callback)
         {
             var timeStampIso8601Format = DateTime.UtcNow.ToString("yyyyMMddTHHmmssZ");
             var dataBytes = S3Util.GetBytes(data);
@@ -78,10 +79,100 @@ namespace SharedServices.ObjectStorage.V1
                 });
         }
         
-        public WaitUntilCallback<string, T, bool> UploadRoutine<T>(string path, T data) => 
-            AsyncUtil.CallbackToIEnumerator<string, T, bool>(path, data, Upload);
+        public WaitUntilCallback<string, T, bool> PutObjectRoutine<T>(string path, T data) => 
+            AsyncUtil.CallbackToIEnumerator<string, T, bool>(path, data, PutObject);
         
-        public Task<bool> UploadAsync<T>(string path, T data) =>
-            AsyncUtil.CallbackToTask<string, T, bool>(path, data, Upload);
+        public Task<bool> PutObjectAsync<T>(string path, T data) =>
+            AsyncUtil.CallbackToTask<string, T, bool>(path, data, PutObject);
+        
+        public void DeleteObject(string path, Action<bool> callback)
+        {
+            var timeStampIso8601Format = DateTime.UtcNow.ToString("yyyyMMddTHHmmssZ");
+            var hashedPayload = S3Util.GetHashedPayload(S3Util.GetBytes(""));
+            var authorization = S3Util.GetAuthorizationHeader("DELETE", path, timeStampIso8601Format, hashedPayload);
+            WebRequestUtil
+                .HttpDeleteRequest(path)
+                .SetRequestHeader("Authorization", authorization)
+                .SetRequestHeader("x-amz-content-sha256", hashedPayload)
+                .SetRequestHeader("x-amz-date", timeStampIso8601Format)
+                .SendWebRequest()
+                .OnCompleted(request =>
+                {
+                    if (request.result != UnityWebRequest.Result.Success)
+                    {
+                        var error = request.error;
+                        if (request.downloadHandler != null)
+                            error += $"\n{request.downloadHandler.text}";
+                        Debug.LogError(error);
+                        callback?.Invoke(false);
+                        return;
+                    }
+
+                    callback?.Invoke(true);
+                });
+        }
+        
+        public WaitUntilCallback<string, bool> DeleteObjectRoutine(string path) => 
+            AsyncUtil.CallbackToIEnumerator<string, bool>(path, DeleteObject);
+        
+        public Task<bool> DeleteObjectAsync(string path) =>
+            AsyncUtil.CallbackToTask<string, bool>(path, DeleteObject);
+        
+        public void ListObjects(string path, string prefix = null, string marker = null, int maxKeys = 1000, 
+            string delimiter = null, Action<ListBucketResult> callback = null)
+        {
+            var timeStampIso8601Format = DateTime.UtcNow.ToString("yyyyMMddTHHmmssZ");
+            var hashedPayload = S3Util.GetHashedPayload(S3Util.GetBytes(""));
+            var hasPrefix = !string.IsNullOrEmpty(prefix);
+            var hasMarker = !string.IsNullOrEmpty(marker);
+            var hasMaxKeys = maxKeys != 1000;
+            var hasDelimiter = !string.IsNullOrEmpty(delimiter);
+
+            if (hasPrefix || hasMarker || hasMaxKeys || hasDelimiter)
+            {
+                path += "?";
+                if (hasPrefix) path += $"prefix={prefix}&";
+                if (hasMarker) path += $"marker={marker}&";
+                if (hasMaxKeys) path += $"max-keys={maxKeys}&";
+                if (hasDelimiter) path += $"delimiter={delimiter}&";
+                path = path.TrimEnd('&');
+            }
+
+            var authorization = S3Util.GetAuthorizationHeader("GET", path, timeStampIso8601Format, hashedPayload);
+            
+            WebRequestUtil
+                .HttpGetRequest(path)
+                .SetRequestHeader("Authorization", authorization)
+                .SetRequestHeader("x-amz-content-sha256", hashedPayload)
+                .SetRequestHeader("x-amz-date", timeStampIso8601Format)
+                .SetDownloadHandler(new DownloadHandlerBuffer())
+                .SendWebRequest()
+                .OnCompleted(request =>
+                {
+                    if (request.result != UnityWebRequest.Result.Success)
+                    {
+                        var error = request.error;
+                        if (request.downloadHandler != null)
+                            error += $"\n{request.downloadHandler.text}";
+                        Debug.LogError(error);
+                        callback?.Invoke(null);
+                        return;
+                    }
+
+                    var listBucketResultXml = request.downloadHandler.text;
+                    var listBucketResult = IXmlService.FromXml<ListBucketResult>(listBucketResultXml);
+                    callback?.Invoke(listBucketResult);
+                });
+        }
+        
+        public WaitUntilCallback<string, string, string, int, string, ListBucketResult> ListObjectsRoutine(string path, 
+            string prefix = null, string marker = null, int maxKeys = 1000, string delimiter = null) => 
+            AsyncUtil.CallbackToIEnumerator<string, string, string, int, string, ListBucketResult>(path, prefix, marker, 
+                maxKeys, delimiter, ListObjects);
+
+        public Task<ListBucketResult> ListObjectsAsync(string path, string prefix = null, string marker = null, 
+            int maxKeys = 1000, string delimiter = null) => 
+            AsyncUtil.CallbackToTask<string, string, string, int, string, ListBucketResult>(path, prefix, marker, maxKeys, 
+                delimiter, ListObjects);
     }
 }

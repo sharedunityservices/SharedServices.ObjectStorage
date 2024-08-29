@@ -9,6 +9,8 @@ namespace SharedServices.ObjectStorage.V1
         public static WaitUntilCallback<T0, T1> CallbackToIEnumerator<T0, T1>(Action<Action<T0, T1>> action) => new(action);
         public static WaitUntilCallback<T0, T1, T2> CallbackToIEnumerator<T0, T1, T2>(Action<Action<T0, T1, T2>> action) => new(action);
         public static WaitUntilCallback<T0, T1, T2, T3> CallbackToIEnumerator<T0, T1, T2, T3>(Action<Action<T0, T1, T2, T3>> action) => new(action);
+        public static WaitUntilCallback<T0, T1, T2, T3, T4> CallbackToIEnumerator<T0, T1, T2, T3, T4>(Action<Action<T0, T1, T2, T3, T4>> action) => new(action);
+        public static WaitUntilCallback<T0, T1, T2, T3, T4, T5> CallbackToIEnumerator<T0, T1, T2, T3, T4, T5>(Action<Action<T0, T1, T2, T3, T4, T5>> action) => new(action);
         
         public static WaitUntilCallback<TArg0, T0> CallbackToIEnumerator<TArg0, T0>(TArg0 arg0, Action<TArg0, Action<T0>> action) => new(arg0, action);
         public static WaitUntilCallback<TArg0, T0, T1> CallbackToIEnumerator<TArg0, T0, T1>(TArg0 arg0, Action<TArg0, Action<T0, T1>> action) => new(arg0, action);
@@ -16,5 +18,9 @@ namespace SharedServices.ObjectStorage.V1
         public static WaitUntilCallback<TArg0, TArg1, T0> CallbackToIEnumerator<TArg0, TArg1, T0>(TArg0 arg0, TArg1 arg1, Action<TArg0, TArg1, Action<T0>> action) => new(arg0, arg1, action);
         public static WaitUntilCallback<TArg0, TArg1, T0, T1> CallbackToIEnumerator<TArg0, TArg1, T0, T1>(TArg0 arg0, TArg1 arg1, Action<TArg0, TArg1, Action<T0, T1>> action) => new(arg0, arg1, action);
         public static WaitUntilCallback<TArg0, TArg1, TArg2, T0> CallbackToIEnumerator<TArg0, TArg1, TArg2, T0>(TArg0 arg0, TArg1 arg1, TArg2 arg2, Action<TArg0, TArg1, TArg2, Action<T0>> action) => new(arg0, arg1, arg2, action);
+        public static WaitUntilCallback<TArg0, TArg1, TArg2, T0, T1> CallbackToIEnumerator<TArg0, TArg1, TArg2, T0, T1>(TArg0 arg0, TArg1 arg1, TArg2 arg2, Action<TArg0, TArg1, TArg2, Action<T0, T1>> action) => new(arg0, arg1, arg2, action);
+        public static WaitUntilCallback<TArg0, TArg1, TArg2, TArg3, T0> CallbackToIEnumerator<TArg0, TArg1, TArg2, TArg3, T0>(TArg0 arg0, TArg1 arg1, TArg2 arg2, TArg3 arg3, Action<TArg0, TArg1, TArg2, TArg3, Action<T0>> action) => new(arg0, arg1, arg2, arg3, action);
+        public static WaitUntilCallback<TArg0, TArg1, TArg2, TArg3, T0, T1> CallbackToIEnumerator<TArg0, TArg1, TArg2, TArg3, T0, T1>(TArg0 arg0, TArg1 arg1, TArg2 arg2, TArg3 arg3, Action<TArg0, TArg1, TArg2, TArg3, Action<T0, T1>> action) => new(arg0, arg1, arg2, arg3, action);
+        public static WaitUntilCallback<TArg0, TArg1, TArg2, TArg3, TArg4, T0> CallbackToIEnumerator<TArg0, TArg1, TArg2, TArg3, TArg4, T0>(TArg0 arg0, TArg1 arg1, TArg2 arg2, TArg3 arg3, TArg4 arg4, Action<TArg0, TArg1, TArg2, TArg3, TArg4, Action<T0>> action) => new(arg0, arg1, arg2, arg3, arg4, action);
     }
 }

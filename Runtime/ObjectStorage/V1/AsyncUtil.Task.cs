@@ -128,5 +128,12 @@ namespace SharedServices.ObjectStorage.V1
             action(arg0, arg1, arg2, arg3, tcs.SetResult);
             return tcs.Task;
         }
+        
+        public static Task<T5> CallbackToTask<T0, T1, T2, T3, T4, T5>(T0 arg0, T1 arg1, T2 arg2, T3 arg3, T4 arg4, Action<T0, T1, T2, T3, T4, Action<T5>> action)
+        {
+            var tcs = new TaskCompletionSource<T5>();
+            action(arg0, arg1, arg2, arg3, arg4, tcs.SetResult);
+            return tcs.Task;
+        }
     }
 }
