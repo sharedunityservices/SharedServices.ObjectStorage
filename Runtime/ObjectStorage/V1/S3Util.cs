@@ -105,7 +105,8 @@ namespace SharedServices.ObjectStorage.V1
 
         private static string GetCanonicalQueryString(string path)
         {
-            return new Uri(path).Query;
+            var query = new Uri(path).Query;
+            return query.StartsWith("?") ? query[1..] : query;
         }
 
         private static string GetCanonicalHeaders(string path, string hashedPayload, string xAmzDate, string range,
