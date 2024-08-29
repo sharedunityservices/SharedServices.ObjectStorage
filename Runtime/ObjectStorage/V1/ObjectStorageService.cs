@@ -174,5 +174,38 @@ namespace SharedServices.ObjectStorage.V1
             int maxKeys = 1000, string delimiter = null) => 
             AsyncUtil.CallbackToTask<string, string, string, int, string, ListBucketResult>(path, prefix, marker, maxKeys, 
                 delimiter, ListObjects);
+        
+        public void Exists(string path, Action<bool> callback)
+        {
+            var timeStampIso8601Format = DateTime.UtcNow.ToString("yyyyMMddTHHmmssZ");
+            var hashedPayload = S3Util.GetHashedPayload(S3Util.GetBytes(""));
+            var authorization = S3Util.GetAuthorizationHeader("HEAD", path, timeStampIso8601Format, hashedPayload);
+            WebRequestUtil
+                .HttpHeadRequest(path)
+                .SetRequestHeader("Authorization", authorization)
+                .SetRequestHeader("x-amz-content-sha256", hashedPayload)
+                .SetRequestHeader("x-amz-date", timeStampIso8601Format)
+                .SendWebRequest()
+                .OnCompleted(request =>
+                {
+                    if (request.result != UnityWebRequest.Result.Success && request.result != UnityWebRequest.Result.ProtocolError)
+                    {
+                        var error = request.error;
+                        if (request.downloadHandler != null)
+                            error += $"\n{request.downloadHandler.text}";
+                        Debug.LogError(error);
+                        callback?.Invoke(false);
+                        return;
+                    }
+
+                    callback?.Invoke(request.result == UnityWebRequest.Result.Success);
+                });
+        }
+        
+        public WaitUntilCallback<string, bool> ExistsRoutine(string path) => 
+            AsyncUtil.CallbackToIEnumerator<string, bool>(path, Exists);
+        
+        public Task<bool> ExistsAsync(string path) =>
+            AsyncUtil.CallbackToTask<string, bool>(path, Exists);
     }
 }

@@ -8,7 +8,8 @@ namespace SharedServices.ObjectStorage.V1
         public static WebRequest HttpGetRequest(string url) => new("GET", url);
         public static WebRequest HttpPostRequest(string url) => new("POST", url);
         public static WebRequest HttpPutRequest(string url) => new("PUT", url);
-        public static WebRequest HttpDeleteRequest(string url) => new("DELETE", url); 
+        public static WebRequest HttpDeleteRequest(string url) => new("DELETE", url);
+        public static WebRequest HttpHeadRequest(string url) => new("HEAD", url);
     }
 
     public class WebRequest

@@ -21,5 +21,9 @@ namespace SharedServices.ObjectStorage.V1
         void ListObjects(string path, string prefix = null, string marker = null, int maxKeys = 1000, string delimiter = null, Action<ListBucketResult> callback = null);
         WaitUntilCallback<string, string, string, int, string, ListBucketResult> ListObjectsRoutine(string path, string prefix = null, string marker = null, int maxKeys = 1000, string delimiter = null);
         Task<ListBucketResult> ListObjectsAsync(string path, string prefix = null, string marker = null, int maxKeys = 1000, string delimiter = null);
+        
+        void Exists(string path, Action<bool> callback);
+        WaitUntilCallback<string, bool> ExistsRoutine(string path);
+        Task<bool> ExistsAsync(string path);
     }
 }
